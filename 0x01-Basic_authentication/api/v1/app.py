@@ -25,16 +25,14 @@ if auth_type == 'auth':
 def filter_requests():
     """ Filter requests
     """
-    if auth:
-        excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
-            '/api/v1/forbidden/',
-        ]
+    if auth is None:
+        return
+    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    if request.path not in excluded_paths:
         if auth.require_auth(request.path, excluded_paths):
-            auth_header = auth.authorization_header(request)
-            user = auth.current_user(request)
-            if auth_header is None:
+            if auth.authorization_header(request) is None:
                 abort(401)
-            if user is None:
+            if auth.current_user(request) is None:
                 abort(403)
 
 
