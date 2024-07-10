@@ -40,6 +40,7 @@ class Auth:
             return None
         return request.headers["Authorization"]
 
+
     def current_user(self, request=None) -> TypeVar('User'):
         """
         Placeholder method for getting the current user.
