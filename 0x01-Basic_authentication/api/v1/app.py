@@ -16,11 +16,12 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 # Load the appropriate authentication instance based on AUTH_TYPE
-if getenv("AUTH_TYPE") == "auth":
+if getenv("AUTH_TYPE") == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
+else:
     from api.v1.auth.auth import Auth
     auth = Auth()
-else:
-    auth = None
 
 
 @app.before_request
@@ -29,9 +30,8 @@ def filter_requests():
     """
     if auth is None:
         return
-    excluded_paths = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
     if request.path not in excluded_paths:
         if auth.require_auth(request.path, excluded_paths):
             if auth.authorization_header(request) is None:
