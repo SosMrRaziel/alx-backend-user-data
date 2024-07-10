@@ -16,10 +16,11 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 # Load the appropriate authentication instance based on AUTH_TYPE
-auth = None
-auth_type = getenv('AUTH_TYPE', 'auth')
-if auth_type == 'auth':
+if getenv("AUTH_TYPE") == "auth":
+    from api.v1.auth.auth import Auth
     auth = Auth()
+else:
+    auth = None
 
 @app.before_request
 def filter_requests():
