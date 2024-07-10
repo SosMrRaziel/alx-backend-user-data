@@ -34,11 +34,9 @@ class Auth:
         Placeholder method for retrieving authorization header.
         Returns None for now.
         """
-        if request is None:
-            return None
-        if "Authorization" not in request.headers:
-            return None
-        return request.headers["Authorization"]
+        if request is not None:
+            return request.headers.get('Authorization', None)
+        return None
 
 
     def current_user(self, request=None) -> TypeVar('User'):
