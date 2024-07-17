@@ -56,6 +56,7 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> str:
         """ Returns a User instance based on a session ID """
+        user = None
         if session_id is None:
             return None
         try:
