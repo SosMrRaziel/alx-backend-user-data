@@ -56,12 +56,11 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> str:
         """ Returns a User instance based on a session ID """
+        user = None
         if session_id is None:
             return None
-
         try:
-            # Assuming you have a method in DB to find user by session ID
-            user = self._db.find_user_by_session_id(session_id)
-            return user
-        except ValueError:
+            user = self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
             return None
+        return user
