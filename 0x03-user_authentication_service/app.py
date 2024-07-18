@@ -78,9 +78,9 @@ def get_reset_password_token():
             rest_token = AUTH.get_reset_password_token(email)
             return jsonify({"email": email, "reset_token": rest_token}), 200
         else:
-            return make_response("Forbidden", 403)
+            abort (403)
     except ValueError:
-        return make_response("Forbidden", 403)
+        rest_token = None
 
 
 if __name__ == "__main__":
