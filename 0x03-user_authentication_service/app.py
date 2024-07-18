@@ -67,6 +67,7 @@ def get_profile() -> str:
     else:
         abort(403)
 
+
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token():
     """ get_reset_password_token """
