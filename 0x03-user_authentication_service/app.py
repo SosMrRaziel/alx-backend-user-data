@@ -71,19 +71,12 @@ def get_profile() -> str:
 def get_reset_password_token():
     """ get_reset_password_token """
     try:
-        email = request.form.get('email')
-        user = AUTH.get_reset_password_token(email)
-        if users:
-            new_token = _generate_uuid()
-            user.new_token = new_token
-
-            AUTH.save_user(user)
-            return jsonify({"email": email, "reset_token": new_token}), 200
-        else:
-            abort(403)
-    except Exception as e:
-        return str(e), 500
-
+        user = AUTH.get_user_by_email('email')
+        token = _generate_uuid()
+        AUTH.update_user(user.id, reset_token=token)
+        return token
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
