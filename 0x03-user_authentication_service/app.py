@@ -70,17 +70,13 @@ def get_profile() -> str:
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token():
-    """ get_reset_password_token """
-    try:
-        email = request.form.get('email')
-        user = AUTH.get_user_from_email(email)
-        if user:
-            rest_token = AUTH.get_reset_password_token(email)
-            return jsonify({"email": email, "reset_token": rest_token}), 200
-        else:
-            abort (403)
-    except ValueError:
-        rest_token = None
+    """ Reset password """
+    email = request.form.get('email')
+    token = AUTH.get_reset_password_token(email)
+    if token:
+        return jsonify({"email": email, "reset_token": token}), 200
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
