@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Main file """
 from flask import Flask, jsonify, request, abort, redirect
-from auth import Auth
+from auth import Auth, _generate_uuid
 
 
 app = Flask(__name__)
@@ -66,6 +66,24 @@ def get_profile() -> str:
         return jsonify({"email": user.email}), 200
     else:
         abort(403)
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token():
+    """ get_reset_password_token """
+    try:
+        email = request.form.get('email')
+        user = AUTH.get_reset_password_token(email)
+        if users:
+            new_token = _generate_uuid()
+            user.new_token = new_token
+
+            AUTH.save_user(user)
+            return jsonify({"email": email, "reset_token": new_token}), 200
+        else:
+            abort(403)
+    except Exception as e:
+        return str(e), 500
+
 
 
 if __name__ == "__main__":
